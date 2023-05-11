@@ -1,5 +1,5 @@
 #!/usr/bin/python3
 if __name__ == "__main__":
-    """import variable a"""
+    """print load variable"""
     from variable_load_5 import a
-    print(f"{a}")
+    print("{:d}".format(a))
