@@ -20,8 +20,8 @@ if __name__ == "__main__":
     db = MySQLdb.connect(user=mySql_user, passwd=mySql_password, db=mySql_database)
     curs = db.cursor()
 
-    cur.execute("SELECT * FROM states ORDER BY id")
-    rows = cur.fetchall()
+    curs.execute("SELECT * FROM states ORDER BY id")
+    rows = curs.fetchall()
 
     for row in rows:
         print(row)
