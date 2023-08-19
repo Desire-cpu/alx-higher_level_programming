@@ -16,7 +16,8 @@ if __name__ == "__main__":
     mySql_password = sys.argv[2]
     mySql_database = sys.argv[3]
 
-     # By default, it will connect to localhost:3306
+    # By default, it will connect to localhost:3306
+
     db = MySQLdb.connect(user=mySql_user, passwd=mySql_password, db=mySql_database)
     curs = db.cursor()
 
