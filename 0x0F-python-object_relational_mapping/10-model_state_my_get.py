@@ -11,9 +11,8 @@ Arguments:
 """
 
 import sys
-from sqlalchemy import (create_engine)
-from sqlalchemy.orm import Session
-from sqlalchemy.engine.url import URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from model_state import Base, State
 
 
@@ -24,17 +23,12 @@ if __name__ == "__main__":
 
     sta_name = sys.argv[4]
 
-    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
-           'username': mySql_u, 'password': mySql_p, 'database': db_name}
+    if __name__ == '__main__':
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.
+                           format(mySql_u, mySql_p, db_name),
+                           pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    engine = create_engine(URL(**url), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
-
-    session = Session(bind=engine)
-
-    q = session.query(State).filter(State.name == sta_name).order_by(State.id)
-
-    if q.first():
-        print(q.first().id)
-    else:
-        print("Not found")
+    state = session.query(State).filter(State.name == sta_name).first()
+    print("Not found" if not state else state.id)
