@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-List sall the states inside the database
+Changes the name of a State in the database
 """
 import sys
 from model_state import Base, State
@@ -15,7 +15,8 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    states = session.query(State).order_by(State.id).all()
+    s_Updated = session.query(State).filter(State.id == 2).first()
 
-    for state in states:
-        print("{}: {}".format(state.id, state.name))
+    if s_Updated:
+        s_Updated.name = 'New Mexico'
+        session.commit()
