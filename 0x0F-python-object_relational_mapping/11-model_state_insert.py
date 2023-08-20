@@ -1,33 +1,22 @@
 #!/usr/bin/python3
 """
-Script ts state to the database
-
-Arguments:
-    takes in three arguments
+Adds the State object "Lousiana" to the database hbtn_0e_6_usa
 """
-
 import sys
-from sqlalchemy import (create_engine)
-from sqlalchemy.orm import Session
-from sqlalchemy.engine.url import URL
 from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
-if __name__ == "__main__":
-    mySql_u = sys.argv[1]
-    mySql_p = sys.argv[2]
-    db_name = sys.argv[3]
+if __name__ == '__main__':
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.
+                           format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
-           'username': mySql_u, 'password': mySql_p, 'database': db_name}
-
-    engine = create_engine(URL(**url), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
-
-    session = Session(bind=engine)
-
-    new = State(name="Louisiana")
-    session.add(new)
+    newState = State(name='Louisiana')
+    session.add(newState)
     session.commit()
 
-    print(new.id)
+    print(newState.id)
