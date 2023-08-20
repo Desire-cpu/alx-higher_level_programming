@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     db = MySQLdb.connect(user=first, passwd=second, db=third)
     curs = db.cursor()
-    query = "SELECT * FROM states WHERE name LIKE BINARY '{}%'".format(name_searched)
+    query = "SELECT * FROM states WHERE name LIKE BINARY '{}'".format(name_searched)
     curs.execute(query)
     rows = curs.fetchall()
 
