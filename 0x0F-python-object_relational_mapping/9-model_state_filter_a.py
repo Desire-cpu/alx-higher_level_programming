@@ -10,9 +10,8 @@ Arguments:
 """
 
 import sys
-from sqlalchemy import (create_engine)
-from sqlalchemy.orm import Session
-from sqlalchemy.engine.url import URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Sessionmaker
 from model_state import Base, State
 
 
@@ -21,15 +20,14 @@ if __name__ == "__main__":
     mySql_p = sys.argv[2]
     db_name = sys.argv[3]
 
-    url = {'drivername': 'mysql+mysqldb', 'host': 'localhost',
-           'username': mySql_u, 'password': mySql_p, 'database': db_name}
 
-    engine = create_engine(URL(**url), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.
+                           format(mySql_u, mySql_p, db_name),
+                           pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    session = Session(bind=engine)
+    states = session.query(State).filter(State.name.like('%a%')).all()
 
-    q = session.query(State).filter(State.name.like('%a%')).order_by(State.id)
-
-    for instance in q:
-        print("{}: {}".format(instance.id, instance.name))
+    for state in states:
+        print("{}: {}".format(state.id, state.name))
