@@ -21,7 +21,7 @@ if __name__ == "__main__":
     db = MySQLdb.connect(user=first, passwd=second, db=third)
     curs = db.cursor()
 
-    curs.execute("SELECT * FROM states ORDER BY id")
+    curs.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' ORDER BY id")
     rows = curs.fetchall()
 
     for row in rows:
