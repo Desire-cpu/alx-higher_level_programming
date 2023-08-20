@@ -22,10 +22,12 @@ if __name__ == "__main__":
     # By default, it will connect to localhost:3306
 
     db = MySQLdb.connect(user=first, passwd=second, db=third)
-    curs = db.cursor()
-    query = "SELECT * FROM states WHERE name LIKE BINARY '{}'".format(name_searched)
-    curs.execute(query)
-    rows = curs.fetchall()
+    cur = db.cursor()
+    cur.execute("SELECT * \
+    FROM states \
+    WHERE CONVERT(`name` USING Latin1) \
+    COLLATE Latin1_General_CS = '{}';".format(name_searched))
+    states = cur.fetchall()
 
-    for row in rows:
-        print(row)
+    for state in states:
+        print(state)
